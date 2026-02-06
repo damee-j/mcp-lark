@@ -2,26 +2,28 @@ from __future__ import annotations
 import os
 from dotenv import load_dotenv
 from errors import auth_required
-from lark_tenant_token import get_valid_tenant_token
 
 load_dotenv()
 
 
 def get_valid_access_token() -> str:
     """
-    Tenant Access Token 사용 (자동 갱신):
-    - App ID + App Secret만으로 자동 갱신
-    - 2시간마다 자동 갱신 (캐시 저장)
-    - OAuth 로그인 불필요
-    - Railway 배포에 최적화
+    User Access Token 사용 (개인 캘린더 접근):
+    - 사용자의 개인 캘린더에 직접 접근 가능
+    - OAuth 로그인으로 발급
+    - 유효기간: 약 30일
 
-    ⚠️ 주의: Tenant Token은 앱 권한으로 작동합니다.
-    개인 캘린더를 사용하려면 Lark에서 캘린더를 봇과 공유하세요.
+    ⚠️ 주의: 토큰이 만료되면 다시 로그인 필요
+    로컬: python3 lark_oauth.py
+    Railway: 환경변수 LARK_USER_TOKEN 업데이트
     """
-    try:
-        return get_valid_tenant_token()
-    except Exception as e:
-        raise auth_required(f"Failed to get tenant access token: {str(e)}")
+    token = os.getenv("LARK_USER_TOKEN")
+    if not token:
+        raise auth_required(
+            "Missing LARK_USER_TOKEN in environment. "
+            "Run: python3 lark_oauth.py"
+        )
+    return token
 
 
 def get_bot_token() -> str:

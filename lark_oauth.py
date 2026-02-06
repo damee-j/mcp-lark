@@ -247,8 +247,8 @@ def main():
         print(f"✅ Refresh token 유효기간: {token_data['refresh_expires_in']}초 ({token_data['refresh_expires_in']/86400:.0f}일)")
 
         # 토큰을 token manager로 저장
-        from lark_token_manager import save_tokens
-        save_tokens(
+        import lark_token_manager
+        lark_token_manager.save_tokens(
             token_data['access_token'],
             token_data['refresh_token'],
             token_data['expires_in'],
@@ -260,7 +260,7 @@ def main():
         print(f"⚠️  토큰이 만료되면 다시 로그인해야 합니다.")
 
         # .env 파일만 업데이트
-        env_file = os.path.join(os.path.dirname(__file__), '..', '.env')
+        env_file = os.path.join(os.path.dirname(__file__), '.env')
         with open(env_file, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
@@ -283,7 +283,7 @@ def main():
 
     # 7. 캘린더 목록 조회
     print("\n📅 캘린더 목록 조회 중...")
-    calendars = get_user_calendars(access_token)
+    calendars = get_user_calendars(oauth_state['access_token'])
 
     if calendars.get('code') == 0:
         calendar_list = calendars.get('data', {}).get('calendar_list', [])
@@ -300,7 +300,7 @@ def main():
             print(f"ID: {calendar_id}")
             print(f"{'=' * 60}")
 
-            events_result = get_calendar_events(access_token, calendar_id)
+            events_result = get_calendar_events(oauth_state['access_token'], calendar_id)
 
             if events_result.get('code') == 0:
                 events = events_result.get('data', {}).get('items', [])
