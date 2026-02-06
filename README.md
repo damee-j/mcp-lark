@@ -71,15 +71,25 @@ git push -u origin main
 
 Railway 대시보드 → Variables 탭:
 
+**필수:**
 ```
 LARK_APP_ID=cli_a90ee729a4389eed
 LARK_APP_SECRET=uW053LW5nhMOBloQoAgQze5aLFC54Syq
+LARK_USER_TOKEN=your_oauth_token_here
 ```
 
-선택적:
+**선택적:**
 ```
 LARK_CALENDAR_ID=your_calendar_id@group.calendar.feishu.cn
 ```
+
+**LARK_USER_TOKEN 발급 방법:**
+1. 로컬에서 `python3 lark_oauth.py` 실행
+2. 브라우저에서 Lark 로그인
+3. `.env` 파일에서 `LARK_USER_TOKEN` 복사
+4. Railway Variables에 붙여넣기
+
+⚠️ **주의:** User Token은 약 30일 후 만료됩니다. 만료 시 다시 발급해야 합니다.
 
 ### 4. 자동 배포 완료!
 
