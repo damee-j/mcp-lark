@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: mcp-lark
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: LARK_APP_ID
+        sync: false
+      - key: LARK_APP_SECRET
+        sync: false
+      - key: LARK_USER_TOKEN
+        sync: false
